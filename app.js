@@ -9,10 +9,10 @@ const {
   handle400, handle404, handle422, handle500,
 } = require('./errors');
 
-console.log('gets to cors invocation');
+
 app.use(cors());
 
-
+console.log('APP');
 app.use(bodyParser.json());
 app.use('/api', apiRouter);
 

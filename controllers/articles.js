@@ -22,6 +22,7 @@ const validSortValues = [
 const regexIsNumber = /^[0-9]*$/;
 
 exports.getArticles = (req, res, next) => {
+  console.log(1);
   const limit = regexIsNumber.test(req.query.limit) ? req.query.limit : 10;
   const p = regexIsNumber.test(req.query.p) ? req.query.p : 1;
   const order = req.query.order === 'asc' ? 'asc' : 'desc';
