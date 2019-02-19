@@ -12,7 +12,8 @@ const {
 
 app.use(cors());
 
-console.log('APP');
+
+console.log('APPP');
 app.use(bodyParser.json());
 app.use('/api', apiRouter);
 
