@@ -1,12 +1,11 @@
 /* eslint no-prototype-builtins:0 */
 
 exports.handle400 = (err, req, res, next) => {
-  console.log(400, ' <<-', err, '<<-');
+  // console.log(400, ' <<-', err, '<<-');
   const hint = err.hint ? ` -->> ${err.hint}` : '';
 
-  // console.log(hint);
   const codes400 = {
-    // 42703: 'invalid field name(s)',
+    42703: 'invalid field name(s)',
     '22P02': 'invalid syntax',
     23502: 'missing mandatory field',
   };
@@ -20,9 +19,7 @@ exports.handle400 = (err, req, res, next) => {
 exports.handle404 = (err, req, res, next) => {
   const hint = err.hint ? ` -->> ${err.hint}` : '';
 
-  // console.log(hint);
   const codes404 = {
-
     23503: 'foreign key not found',
   };
   if (codes404.hasOwnProperty(err.code)) {

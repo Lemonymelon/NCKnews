@@ -1,0 +1,34 @@
+ /api
+    /topics
+      ✓ GET status 200 responds invalid method error
+      ✓ POST status 201 responds with inserted topic
+      ✓ POST status 400 responds with correct error message when passed object with invalid field names
+      ✓ POST status 400 responds with correct error message when passed object with missing field names
+      ✓ POST status 422 responds with correct error message when passed object with reserved unique field name(s)
+      ✓ PATCH status 405 responds invalid method error
+      ✓ DEL status 405 responds invalid method error
+    /topics/:topic/articles
+      ✓ GET status 200 responds with articles on a specified topic
+      1) GET status 404 responds with not found error // hitting if block, not sending error, not hitting catch block
+      2) GET status 404 responds with not found error // hitting if block, not sending error, not hitting catch block
+      ✓ GET status 200 should accept limit query
+      ✓ GET status 200 should ignore invalid limit query
+      ✓ GET status 200 should accept sort_by and order queries 
+      ✓ GET status 200 should ignore invalid sort field
+      ✓ GET status 200 should ignore invalid order query
+      ✓ GET status 200 should accept p (from page) query
+      ✓ GET status 200 should ignore invalid (e.g. string) p (from page) query
+      ✓ GET status 200 should ignore invalid query when used
+      ✓ POST status 201 should respond with article with correct topic
+      ✓ POST status 400 responds with correct error message when passed object with missing field names
+      ✓ POST status 400 responds with correct error message when passed object with invalid field names
+      ✓ POST status 404 responds with correct error message when passed object using invalid topic
+      ✓ PATCH status 405 responds invalid method error
+      ✓ DEL status 405 responds invalid method error
+    /api/articles
+      ✓ GET status 200 returns an array of articles
+      ✓ GET status 200 should accept limit query
+      ✓ GET status 200 should ignore non-numeric limit query
+      ✓ GET status 200 should accept sort_by and order queries
+      ✓ GET status 400 should ignore invalid sort field
+      5) "before each" hook for "GET status 200 should ignore invalid order query" // not destroying connection

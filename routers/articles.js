@@ -11,6 +11,7 @@ const {
 } = require('../controllers/articles');
 const { handle405 } = require('../errors');
 
+console.log('articles router');
 articlesRouter
   .route('/')
   .get(getArticles)
@@ -26,7 +27,8 @@ articlesRouter
 articlesRouter
   .route('/:article_id/comments')
   .get(getCommentsByArticleId)
-  .post(postCommentToArticle);
+  .post(postCommentToArticle)
+  .all(handle405);
 
 articlesRouter.route('/:article_id/comments/:comment_id').patch(amendCommentById).delete(deleteCommentById);
 

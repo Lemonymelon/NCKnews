@@ -123,7 +123,6 @@ describe('/api', () => {
         expect(articles[2].article_id).to.equal(3);
         expect(articles[0]).to.have.all.keys(
           'article_id',
-
           'created_at',
           'author',
           'title',
@@ -158,13 +157,13 @@ describe('/api', () => {
         expect(articles.length).to.equal(10);
       }));
 
-    it('GET status 400 should return  correct error message when passed url with invalid sort field', () => request
+    it('GET status 200 should ignore invalid sort field', () => request // *
       .get('/api/topics/mitch/articles?sort_by=sharticle_id&order=asc')
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).to.equal(
-          'bad request -->> invalid field name(s) -->> select "articles"."article_id", "articles"."body", "articles"."created_at", "articles"."username", "title", "topic", "articles"."votes", count("comments"."comment_id") as "comment_count" from "articles" left join "comments" on "comments"."article_id" = "articles"."article_id" where "topic" = $1 group by "articles"."article_id" order by "sharticle_id" asc limit $2 - column "sharticle_id" does not exist -->> Perhaps you meant to reference the column "articles.article_id" or the column "comments.article_id".',
-        );
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles[0].article_id).to.equal(12);
+        expect(articles[articles.length - 1].article_id).to.equal(2);
+        expect(articles.length).to.equal(10);
       }));
 
     it('GET status 200 should ignore invalid order query', () => request
@@ -248,7 +247,7 @@ describe('/api', () => {
         );
       }));
 
-    it('POST status 400 responds with correct error message when passed object with invalid field names', () => request
+    it('POST status 404 responds with correct error message when passed object using invalid topic', () => request
       .post('/api/topics/smitch/articles')
       .send({
         title: 'one fiddy for the golden smitch',
@@ -324,7 +323,7 @@ describe('/api', () => {
       }));
 
     it('GET status 200 should accept sort_by and order queries', () => request
-      .get('/api/articles?sort_by=article_id&order=asc')
+      .get('/api/articles?sort_by=article_id&order=desc')
       .expect(200)
       .then(({ body: { articles } }) => {
         expect(articles[0].article_id).to.equal(1);
@@ -332,13 +331,12 @@ describe('/api', () => {
         expect(articles.length).to.equal(10);
       }));
 
-    it('GET status 400 should return  correct error message when passed url with invalid sort field', () => request
+    it('GET status 400 should ignore invalid sort field', () => request
       .get('/api/articles?sort_by=farticle_id&order=asc')
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).to.equal(
-          'bad request -->> invalid field name(s) -->> select "articles"."article_id", "articles"."body", "articles"."created_at", "articles"."username" as "author", "title", "topic", "articles"."votes", count("comments"."comment_id") as "comment_count" from "articles" left join "comments" on "comments"."article_id" = "articles"."article_id" group by "articles"."article_id" order by "farticle_id" asc limit $1 - column "farticle_id" does not exist -->> Perhaps you meant to reference the column "articles.article_id" or the column "comments.article_id".',
-        );
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles[0].article_id).to.equal(12);
+        expect(articles[articles.length - 1].article_id).to.equal(3);
       }));
 
     it('GET status 200 should ignore invalid order query', () => request
@@ -421,9 +419,9 @@ describe('/api', () => {
         expect(body.article[0].votes).to.equal(101);
       }));
 
-    it('PATCH status 200 should serve article with augmented vote count', () => request
+    it('PATCH status 400 should return correct error message when passed malformed syntax', () => request
       .patch('/api/articles/1')
-      .send({ inc_votes: 'one' })
+      .send({ inc_votes: 'lettuce' })
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).to.equal(
@@ -520,22 +518,28 @@ describe('/api', () => {
   });
 
   describe('/users', () => {
-    it('GET status 200 should return an array of users', () => {
-      request
-        .get('/api/users')
-        .expect(200)
-        .then(({ body: { users } }) => {
-          expect(users).to.be.an('array');
-          expect(users.length).to.equal(3);
-          expect(users[0]).to.have.keys('username', 'name', 'avatar_url');
-        });
-    });
+    it('GET status 200 should return an array of users', () => request
+      .get('/api/users')
+      .expect(200)
+      .then(({ body: { users } }) => {
+        expect(users).to.be.an('array');
+        expect(users.length).to.equal(3);
+        expect(users[0]).to.have.keys('username', 'name', 'avatar_url');
+      }));
     it('GET status 200 should return a single user when passed a user ID', () => {
       request
         .get('/api/users/butter_bridge')
         .expect(200)
         .then(({ body: { user } }) => {
           expect(user.username).to.equal('butter_bridge');
+        });
+    });
+    it.only('GET status 200 should return articles belonging to a single user when passed a user ID', () => {
+      request
+        .get('/api/users/butter_bridge/articles')
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles[0].author).to.equal('butter_bridge');
         });
     });
   });

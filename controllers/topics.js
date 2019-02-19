@@ -6,6 +6,15 @@ const {
 } = require('../db/models/topics');
 const { formatArticleByTopic } = require('../utils');
 
+const validSortValues = [
+  'article_id',
+  'created_at',
+  'author',
+  'title',
+  'topic',
+  'votes',
+  'comment_count'];
+
 const regexIsNumber = /^[0-9]*$/;
 
 exports.getTopics = (req, res, next) => {
@@ -26,16 +35,18 @@ exports.postTopic = (req, res, next) => {
 
 exports.getArticlesByTopic = (req, res, next) => {
   const { topic } = req.params;
-  const limit = 10;
+  const limit = regexIsNumber.test(req.query.limit) ? req.query.limit : 10;
   const p = regexIsNumber.test(req.query.p) ? req.query.p : 1;
+  const order = req.query.order === 'asc' ? 'asc' : 'desc';
+  const sort_by = validSortValues.includes(req.query.sort_by) ? req.query.sort_by : 'articles.created_at';
   const {
     offset: skip_num_articles = p <= 1 ? 0 : (p - 1) * limit,
-    sort_by = 'articles.created_at',
-    order = 'desc',
   } = req.query;
   fetchArticlesByTopic(topic, limit, skip_num_articles, sort_by, order)
     .then((articles) => {
-      if (articles.length < 1) {
+      // console.log(!articles[0]);
+      if (articles === undefined || articles.length == 0) {
+        // console.log('if');
         return Promise.reject({ status: 404, msg: 'Page not found!' });
       }
       res.status(200).send({ articles, total_count: articles.length });
@@ -50,6 +61,10 @@ exports.postArticleByTopic = (req, res, next) => {
   insertArticleByTopic(formattedArticle)
     .then(([article]) => {
       res.status(201).send({ article });
+    }).then((postedArticle) => {
+      if (!postedArticle) {
+        return Promise.reject({ status: 404, msg: 'Page not found!' });
+      }
     })
     .catch(next);
 };

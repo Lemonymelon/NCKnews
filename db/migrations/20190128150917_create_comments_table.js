@@ -14,7 +14,8 @@ exports.up = function (knex, Promise) {
       .integer('article_id')
       .references('article_id')
       .inTable('articles')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     commentsTable.integer('votes').defaultTo(0);
     commentsTable.timestamp('created_at').defaultTo(knex.fn.now());
     commentsTable.string('body', 10000).notNullable();

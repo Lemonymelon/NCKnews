@@ -66,7 +66,7 @@ testing
 
 * You are not responding with a total_count of the number of articles are for a given topic atm.
 
-  3) /
+  3) / DONE
        /api
          /topics/:topic/articles
            GET status:200
@@ -76,7 +76,7 @@ testing
 * You are giving back 400 Bad Request for this end-point which is fine (however, we decided in the end
 not to penalise for erroneous queries)
 
-  4) /
+  4) / DONE
        /api
          /topics/:topic/articles
            ERRORS
@@ -85,7 +85,7 @@ not to penalise for erroneous queries)
 
 * How are you handling the case for POSTing an article by a non-existent topic
 
-  5) /
+  5) / DONE
        /api
          /articles
            GET status:200
@@ -95,7 +95,7 @@ not to penalise for erroneous queries)
 * Getting a Bad Request for invalid sort_by query at the moment
 This is fine though if you are happy with this behaviour from your API
 
-  6) /
+  6) / DONE
        /api
          /articles/:article_id
            GET status:200 responds with a single article object:
@@ -119,7 +119,7 @@ This is fine though if you are happy with this behaviour from your API
 * Re-name author to username in this end-point
 
 
-  7) /
+  7) / DONE
        /api
          /articles/:article_id
            GET status:404 url contains a non-existent (but potentially valid) article_id:
@@ -135,7 +135,7 @@ if (article.length < 1) {
 ```
 But article is not an array! It is just `undefined` here
 
-  8) /
+  8) / DONE
        /api
          /articles/:article_id
            PATCH status:200 and an updated article when given a body including a valid "inc_votes" (VOTE UP):
@@ -143,7 +143,7 @@ But article is not an array! It is just `undefined` here
 
 * Make sure you array-destructure in this controller for your PATCH request
 
-  9) /
+  9) / DONE
        /api
          /articles/:article_id
            PATCH status:200 responds with an updated article when given a body including a valid "inc_votes" (VOTE DOWN):
@@ -152,7 +152,7 @@ But article is not an array! It is just `undefined` here
 * Ensure you array-destructure - same problem
 
 
-  10) /
+  10) / DONE
        /api
          /articles/:article_id
            PATCH status:200s no body responds with an unmodified article:
@@ -160,7 +160,7 @@ But article is not an array! It is just `undefined` here
 
 * `totesVotes` is `NaN` and therefore knex is throwing an error
 
-  11) /
+  11) / DONE?
        /api
          /articles/:article_id
            DELETE status:204 and removes the article when given a valid article_id:
@@ -170,7 +170,7 @@ But article is not an array! It is just `undefined` here
 the given article - and, therefore, knex is not allowing this.  Use CASCADE on commnents
 in your migrations to fix this issue
 
-  12) /
+  12) / DONE?
        /api
          /articles/:article_id
            DELETE status:404 when given a non-existent article_id:
@@ -178,7 +178,7 @@ in your migrations to fix this issue
 
 TypeError being created here by checking `.length` in your then() block
 
-  13) /
+  13) / DONE
        /api
          /articles/:article_id/comments/:comment_id
            PATCH status:200 with no body responds with an unmodified comment:
@@ -186,7 +186,7 @@ TypeError being created here by checking `.length` in your then() block
 
 * toteVotes is `NaN` at the moment 
 
-  14) /
+  14) / DONE
        /api
          /articles/:article_id/comments/:comment_id
            PATCH status:404 non-existent article_id is used:
@@ -196,7 +196,7 @@ TypeError being created here by checking `.length` in your then() block
 you attempt to find the comment first and then get the votes but you are destructuring inc_votes
 off null
 
-  15) /
+  15) / DONE
        /api
          /articles/:article_id/comments/:comment_id
            PATCH status:404 non-existent comment_id is used:
@@ -204,7 +204,7 @@ off null
 
 * Same issue here
 
-  16) /
+  16) / DONE
        /api
          /articles/:article_id/comments/:comment_id
            DELETE status:404 client uses a non-existent article_id:
@@ -213,7 +213,7 @@ off null
 * You get nothing back then .length again and so the JS engine throws a TypeError
 
 
-  17) /
+  17) / DONE
        /api
          /articles/:article_id/comments/:comment_id
            DELETE status:404 client uses non-existent comment_id:
@@ -222,7 +222,7 @@ off null
 * Same issue here as the above test
 
 
-  18) /
+  18) / DONE
        /api
          /articles/:article_id/comments/:comment_id
            invalid methods respond with 405:

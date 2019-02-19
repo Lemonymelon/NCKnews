@@ -13,6 +13,8 @@ topicsRouter
   .post(postTopic)
   .all(handle405);
 
+// console.log('topics');
+
 topicsRouter
   .route('/:topic/articles')
   .get(getArticlesByTopic)

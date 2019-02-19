@@ -23,7 +23,7 @@ exports.fetchArticlesByID = article_id => connection('articles')
     'articles.article_id',
     'articles.body',
     'articles.created_at',
-    'articles.username',
+    'articles.username as author',
     'title',
     'topic',
     'articles.votes',
@@ -35,15 +35,11 @@ exports.fetchArticlesByID = article_id => connection('articles')
   .returning('*');
 
 exports.editArticleByID = (article_id, inc_votes) => connection('articles')
-  .select('votes')
-  .where({ article_id })
-  .then(([{ votes }]) => {
-    const totesVotes = inc_votes + votes;
-    return connection('articles')
-      .update('votes', totesVotes)
-      .where('article_id', article_id)
-      .returning('*');
-  });
+  .where('articles.article_id', '=', article_id)
+  .increment('votes', inc_votes)
+  .returning('*');
+
+// knex increment rather than 2step
 
 exports.removeArticleByID = article_id => connection('articles')
   .where({ article_id })
@@ -70,16 +66,12 @@ exports.insertCommentByArticleID = comment => connection('comments')
   .returning('*');
 
 exports.editCommentByArticleID = (article_id, comment_id, inc_votes) => connection('comments')
-  .select('votes')
-  .where({ article_id, comment_id })
-  .then(([{ votes }]) => {
-    const totesVotes = inc_votes + votes;
-    return connection('comments')
-      .update('votes', totesVotes)
-      .where('article_id', article_id)
-      .andWhere('comment_id', comment_id)
-      .returning('*');
-  });
+  .where({
+    'comments.comment_id': comment_id,
+    'comments.article_id': article_id,
+  })
+  .increment('votes', inc_votes)
+  .returning('*');
 
 exports.removeCommentById = (article_id, comment_id) => connection('comments')
   .where({ article_id, comment_id })
