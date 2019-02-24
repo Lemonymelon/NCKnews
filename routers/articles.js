@@ -30,6 +30,9 @@ articlesRouter
   .post(postCommentToArticle)
   .all(handle405);
 
-articlesRouter.route('/:article_id/comments/:comment_id').patch(amendCommentById).delete(deleteCommentById);
+articlesRouter
+  .route('/:article_id/comments/:comment_id')
+  .patch(amendCommentById)
+  .delete(deleteCommentById);
 
 module.exports = articlesRouter;

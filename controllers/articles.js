@@ -56,9 +56,10 @@ exports.getArticleById = (req, res, next) => {
 exports.amendArticleById = (req, res, next) => {
   const { article_id } = req.params;
   const inc_votes = typeof req.body.inc_votes === 'number' ? req.body.inc_votes : null;
-  // console.log(inc_votes);
+
+  console.log(inc_votes);
   editArticleByID(article_id, inc_votes)
-    .then((article) => {
+    .then(([article]) => {
       // console.log(article);
       if (!article) {
         return Promise.reject({ status: 404, msg: 'Page not found!' });

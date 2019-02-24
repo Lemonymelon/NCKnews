@@ -1,0 +1,50 @@
+Plan: routes and where to use them
+
+/api/topics
+
+GET
+- 
+icons stored elsewhere, linked by keys
+
+/api/topics/:topic/articles
+
+///
+
+Home Page:
+state:[all topic slugs, all article titles] (option to search all bodies to re-render)
+
+Nav
+search bar (searches all articles/topics)
+big ol' links (icons)
+
+---
+
+Topics Page:
+state: topics
+
+Nav
+(for now) list of topic slugs(links) and descriptions 
+
+---
+
+Articles Page:
+state: articles
+
+Nav
+list of article titles, authors (icon?), comment count, votes, time created
+
+---
+
+Single Article Page:
+
+Nav
+article title (topic icon?) votes (& voting buttons)
+by {author}
+article body
+comments div
+- comment count
+- comment div
+- author
+- votes (& voting buttons)
+
+// viewport height everything

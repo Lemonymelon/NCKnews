@@ -194,7 +194,7 @@ describe('/api', () => {
         expect(articles[0].article_id).to.equal(1);
       }));
 
-    it('POST status 201 should respond with article with correct topic', () => request
+    it('POST status 201 should respond with article with correct article', () => request
       .post('/api/topics/mitch/articles')
       .send({
         title: 'you beautiful son of a Mitch',
@@ -414,9 +414,20 @@ describe('/api', () => {
       .patch('/api/articles/1')
       .send({ inc_votes: 1 })
       .expect(200)
-      .then(({ body }) => {
-        expect(body.article[0].article_id).to.equal(1);
-        expect(body.article[0].votes).to.equal(101);
+      .then(({ body: { article } }) => {
+        console.log(article);
+        expect(article.article_id).to.equal(1);
+        expect(article.votes).to.equal(101);
+      }));
+
+    it.only('PATCH status 200 should serve article with augmented vote count', () => request
+      .patch('/api/articles/1')
+      .send({ inc_votes: -1 })
+      .expect(200)
+      .then(({ body: { article } }) => {
+        console.log(article);
+        expect(article.article_id).to.equal(1);
+        expect(article.votes).to.equal(99);
       }));
 
     it('PATCH status 400 should return correct error message when passed malformed syntax', () => request
@@ -534,7 +545,7 @@ describe('/api', () => {
           expect(user.username).to.equal('butter_bridge');
         });
     });
-    it.only('GET status 200 should return articles belonging to a single user when passed a user ID', () => {
+    it('GET status 200 should return articles belonging to a single user when passed a user ID', () => {
       request
         .get('/api/users/butter_bridge/articles')
         .expect(200)
